@@ -1,0 +1,6 @@
+https://github.com/mit-pdos/xv6-public/blob/master/proc.h (xv6)
+http://fxr.watson.org/fxr/source/sys/proc.h#L650 (FreeBSD)
+http://fxr.watson.org/fxr/source/sys/proc.h?v=OPENBSD#L131 (OpenBSD)
+https://github.com/opensource-apple/xnu/blob/master/bsd/sys/proc_internal.h#L194 (XNU == Mac OS X)
+https://github.com/torvalds/linux/blob/master/include/linux/sched.h#L737 (Linux)
+	horrivelmente complexo, prossiga por sua própria conta e risco :)
