@@ -7,17 +7,13 @@
 int main(void)
 {
      pid_t f, w;
-     int status, x = 171;
+     int status;
      
      printf("Processo principal (PID=%u)\n", getpid());
-     for(x=0; x<10; x++){
-     	printf("x=%d\n", x);
-	}
      f = fork();
      if (f == 0) {
-	  sleep(5);
+	  sleep(10);
 	  printf("Alo do filho (PID=%u)\n", getpid());
-	  printf("x=%d\n", x);
 	  sleep(3);
 	  exit(4);
      } else {

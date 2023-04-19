@@ -1,0 +1,16 @@
+IPC no Linux -- códigos vistos na aula de 11/04/23
+==================================================
+
+conc6.c
+    resolve exclusão mútua em conc1.c usando semáforos anônimos (threads)
+
+sincr4.c
+    implementa sincronização em sincr1.c usando semáforos anônimos (threads)
+
+prodcons-proc.c
+
+    adapta o exemplo de produtor-consumidor usando processos com
+    memória compartilhada e semáforos nomeados (prod.c e cons.c),
+    colocando produtor e consumidor no mesmo arquivo fonte e usando
+    fork() para criar um subprocesso
+        * o processo pai é o produtor e o filho é o consumidor

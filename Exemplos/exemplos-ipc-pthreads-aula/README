@@ -1,0 +1,20 @@
+SOP - aula de 15/09/22
+======================
+
+Durante a aula foram discutidos mecanismos de IPC no Linux, usando
+alguns exemplos de código:
+
+* Exemplo 1: resolvendo condição de disputa com mutexes
+
+  - conc1.c - código com condição de disputa (linhas 18 e 28)
+  - conc5.c - solução com mutex
+
+
+* Exemplo 2: sincronização
+
+  - sincr1.c - código concorrente que imprime as letras S, O, P em uma ordem
+    	       indeterminada
+	      
+  - sincr2.c - solução que usa mutex e variáveis de condição para
+               garantir a sequência de execução de modo a imprimir
+               sempre "SOP"
