@@ -1,39 +1,37 @@
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/types.h>
-#include <pthread.h>
+#include <unistd.h>
 
-void funcThread(void *argp)
-{
-     sleep(2);
-     printf("Alo do filho (pid=%u, thread=%u, arg=%s)\n", getpid(), 
-	    pthread_self(), (char *)argp);
-     sleep(3);
+void funcThread(void *argp) {
+    sleep(2);
+    printf("Alo do filho (pid=%u, thread=%lu, arg=%s)\n", getpid(),
+           pthread_self(), (char *)argp);
+    sleep(3);
 }
 
-int main(void)
-{
-     pthread_t t1;
-     int rc;
-     
-     printf("Processo principal (pid=%u, thread=%u)\n", getpid(), 
-	    pthread_self());
+int main(void) {
+    pthread_t t1;
+    int rc;
 
-     rc = pthread_create(&t1, NULL, (void *)funcThread, (void *) "Bacalhau");
+    printf("Processo principal (pid=%u, thread=%lu)\n", getpid(),
+           pthread_self());
 
-     if (rc != 0) {
-	  perror("erro na criacao da thread");
-	  exit(1);
-     }
-     printf("Pai (thread=%u) esperando pelo filho (thread=%u)\n", 
-	    pthread_self(), t1);
+    rc = pthread_create(&t1, NULL, (void *)funcThread, (void *)"Bacalhau");
 
-     rc = pthread_join(t1, NULL);
+    if (rc != 0) {
+        perror("erro na criacao da thread");
+        exit(1);
+    }
+    printf("Pai (thread=%lu) esperando pelo filho (thread=%lu)\n",
+           pthread_self(), t1);
 
-     if (rc != 0) {
-	  perror("erro no join");
-	  exit(1);
-     }
-     return 0;
+    rc = pthread_join(t1, NULL);
+
+    if (rc != 0) {
+        perror("erro no join");
+        exit(1);
+    }
+    return 0;
 }
