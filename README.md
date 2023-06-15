@@ -1,2 +1,3 @@
 # SOP
  Tarefas, listas e trabalhos de SOP serão armazenados aqui.
+Obs do Arthur do futuro: não tem trabalhos, só exemplos para visualizar...
