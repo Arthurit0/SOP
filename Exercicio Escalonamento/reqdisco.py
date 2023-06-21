@@ -1,38 +1,101 @@
-def read_requests():
-    requests = []
-    try:
-        while True:
-            request = input().strip().split()
-            if request:
-                requests.append((int(request[0]), int(request[1]), request[2]))
-    except EOFError:
-        pass
-    return requests
+# Nomes: Arthur José e Ferdinando Galera
 
 
-def merge_requests(requests):
-    merged = []
-    for req in sorted(requests):
+class Requisicao:
+    def __init__(self, bloco_inicial, num_blocos, operacao):
+        self.bloco_inicial = bloco_inicial
+        self.num_blocos = num_blocos
+        self.operacao = operacao
+
+
+def verify_requisicoes(requisicao, listCurrent):
+    for i in range(len(listCurrent)):
+        req_prox = listCurrent[i]
+        if req_prox == requisicao:
+            continue
+
         if (
-            not merged
-            or req[2] != merged[-1][2]
-            or req[0] != merged[-1][0] + merged[-1][1]
-            or merged[-1][1] + req[1] > 64
+            req_prox.operacao == requisicao.operacao
+            and requisicao.num_blocos + req_prox.num_blocos <= 64
+            and (
+                req_prox.operacao == "r"
+                and (
+                    req_prox.bloco_inicial
+                    <= requisicao.bloco_inicial
+                    <= requisicao.bloco_inicial + req_prox.num_blocos - 1
+                )
+                or req_prox.operacao == "w"
+                and (
+                    req_prox.bloco_inicial + req_prox.num_blocos - 1
+                    == requisicao.bloco_inicial - 1
+                )
+            )
         ):
-            merged.append(req)
+            return i
+
+    return -1
+
+
+def fundir(req_1, req_2):
+    if req_1.bloco_inicial <= req_2.bloco_inicial:
+        return Requisicao(
+            req_1.bloco_inicial, req_1.num_blocos + req_2.num_blocos, req_1.operacao
+        )
+    else:
+        return Requisicao(
+            req_2.bloco_inicial, req_1.num_blocos + req_2.num_blocos, req_2.operacao
+        )
+
+
+def fundir_requisicoes(requisicoes):
+    if len(requisicoes) <= 1:
+        return requisicoes
+
+    requisicoes_fundidas = []
+
+    for i in range(0, len(requisicoes)):
+        req_prox = requisicoes[i]
+
+        index = verify_requisicoes(req_prox, requisicoes_fundidas)
+        if index == -1:
+            requisicoes_fundidas.append(req_prox)
         else:
-            new_size = min(merged[-1][1] + req[1], 64)
-            merged[-1] = (merged[-1][0], new_size, merged[-1][2])
-    return merged
+            while index != -1:
+                req_prox = fundir(req_prox, requisicoes_fundidas[index])
+                requisicoes_fundidas.append(req_prox)
+                requisicoes_fundidas.remove(requisicoes_fundidas[index])
+                index = verify_requisicoes(
+                    req_prox,
+                    requisicoes_fundidas,
+                )
+
+    requisicoes_ordenadas = sorted(
+        requisicoes_fundidas, key=lambda req: req.bloco_inicial
+    )
+    return requisicoes_ordenadas
 
 
-def main():
-    requests = read_requests()
-    merged_requests = merge_requests(requests)
+def imprimir_fila(requisicoes):
     print("Fila:")
-    for req in merged_requests:
-        print(req[0], req[1], req[2])
+    for req in requisicoes:
+        print(f"{req.bloco_inicial} {req.num_blocos} {req.operacao}")
 
 
-if __name__ == "__main__":
-    main()
+def ler_requisicoes():
+    requisicoes = []
+    while True:
+        try:
+            linha = input()
+            valores = linha.split()
+            bloco_inicial = int(valores[0])
+            num_blocos = int(valores[1])
+            operacao = valores[2]
+            requisicoes.append(Requisicao(bloco_inicial, num_blocos, operacao))
+        except EOFError:
+            break
+    return requisicoes
+
+
+requisicoes = ler_requisicoes()
+requisicoes_fundidas = fundir_requisicoes(requisicoes)
+imprimir_fila(requisicoes_fundidas)
